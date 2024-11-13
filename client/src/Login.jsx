@@ -18,13 +18,19 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+  
+    // Define the API URL based on the environment
+    const apiUrl = process.env.NODE_ENV === 'production' 
+      ? "https://healthify-31ok.onrender.com/api/login" 
+      : "http://localhost:5000/api/login";
+  
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         alert("Login successful!");
@@ -38,6 +44,7 @@ const Login = () => {
       alert("Error during login: " + error.message);
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem('userLoggedIn'); // Remove login status

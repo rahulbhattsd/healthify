@@ -8,11 +8,16 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Initialize useNavigate
 
+  // Define the API URL based on the environment
+  const apiUrl = process.env.NODE_ENV === 'production' 
+    ? "https://healthify-31ok.onrender.com/api/signup" 
+    : "http://localhost:5000/api/signup";
+
   const handleSignup = async (e) => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost:5000/api/signup", {
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,6 +74,7 @@ const Signup = () => {
 };
 
 export default Signup;
+
 
 
 
