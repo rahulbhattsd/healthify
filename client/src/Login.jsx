@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
@@ -10,10 +9,13 @@ const Login = () => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    // Optionally, you can check login status based on some criteria like a session or flag
+    // For now, we keep it simple and assume user will be logged in based on state.
+    if (localStorage.getItem('userLoggedIn')) {
       setIsLoggedIn(true); 
     }
   }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -22,12 +24,12 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         alert("Login successful!");
-        localStorage.setItem("token", data.token);
         setIsLoggedIn(true);
+        localStorage.setItem('userLoggedIn', 'true'); // Store login status (not token)
         navigate('/form'); // Redirect to Form page
       } else {
         alert("Login failed: " + data.error);
@@ -36,12 +38,12 @@ const Login = () => {
       alert("Error during login: " + error.message);
     }
   };
-  
+
   const handleLogout = () => {
-    localStorage.removeItem('token'); 
+    localStorage.removeItem('userLoggedIn'); // Remove login status
     setIsLoggedIn(false); 
     alert("Logged out successfully!");
-    navigate('/login'); 
+    navigate('/login'); // Redirect to login page
   };
 
   const handleSignupRedirect = () => {
@@ -81,7 +83,6 @@ const Login = () => {
 };
 
 export default Login;
-
 
 
 
