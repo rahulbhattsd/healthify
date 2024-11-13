@@ -13,7 +13,12 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+// Replace with your deployed frontend URL
+const allowedOrigins = ['https://healthify-31ok.onrender.com/']; // Or use a wildcard for all origins
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, // if you're handling cookies or credentials
+}));
 app.use(express.json());  // Parses incoming JSON requests
 
 // Serve the static files from the React app
