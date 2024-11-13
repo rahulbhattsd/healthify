@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const path = require('path');  // Import path module
 const connectDB = require('./database'); // Ensure database connection module is correct
 const User = require('./User');    // Import the User model
 // Load environment variables at the very start
@@ -16,6 +17,14 @@ app.use(cors({
   origin: 'http://localhost:5173',  // Allow requests from the React frontend
 }));
 app.use(express.json());  // Parses incoming JSON requests
+
+// Serve the static files from the React app
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+// Serve frontend on all routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+});
 
 // Define routes
 app.get('/', (req, res) => {
@@ -85,7 +94,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-
 // Logout route
 app.post('/api/logout', (req, res) => {
   req.session.destroy((err) => {
@@ -126,7 +134,7 @@ app.post('/api/processData', async (req, res) => {
 });
 
 // Start server
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;  // Use environment variable for port
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
