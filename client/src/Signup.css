@@ -1,0 +1,47 @@
+/* Styling for the Signup form */
+.signup-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-input:focus {
+    border-color: #5a67d8;
+    outline: none;
+    background-color: #fff;
+  }
+  
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #5a67d8;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    background-color: #434190;
+  }
+  
+  .submit-button:focus {
+    outline: none;
+  }
+  

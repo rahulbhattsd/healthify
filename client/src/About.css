@@ -1,0 +1,186 @@
+/* General About Section Styling */
+.about-section {
+    width: 90%; /* Full width */
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 80px 50px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    overflow: hidden;
+    background: linear-gradient(135deg, #00c6ff, #00796b); /* Gradient background */
+    animation: fadeInUp 1s ease-in-out;
+  }
+  
+  /* Title Styling */
+  .about-section h1 {
+    font-size: 3rem;
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeInUp 1s 0.5s forwards;
+  }
+  
+  /* Tagline */
+  .tagline {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 300;
+    margin-bottom: 40px;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeInUp 1s 0.7s forwards;
+  }
+  
+  /* Intro Paragraph Styling */
+  .intro {
+    font-size: 1.2rem;
+    color: #f7f7f7;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 1s 1s forwards;
+  }
+  
+  /* About Grid */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeInUp 1s 1.3s forwards;
+  }
+  
+  .about-item {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .about-item h3 {
+    font-size: 1.8rem;
+    color: #00796b;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .about-item p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Mission Statement Styling */
+  .mission-statement {
+    font-size: 1.3rem;
+    color: #f7f7f7;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 40px auto;
+    margin-bottom: 50px;
+    font-weight: 300;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeInUp 1s 1.5s forwards;
+  }
+  
+  /* CTA Text */
+  .cta-text {
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 1s 1.8s forwards;
+  }
+  
+  /* CTA Button */
+  .about-cta-button {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    background-color: #00796b;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: bounceInUp 1s 2s forwards;
+  }
+  
+  .about-cta-button:hover {
+    background-color: #004d40;
+  }
+  
+  /* Keyframe Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes bounceInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  /* Responsive Styling for Small Screens */
+@media (max-width: 768px) {
+  .about-section {
+    padding: 40px 20px;
+  }
+
+  .about-section h1 {
+    font-size: 2rem;
+  }
+
+  .tagline {
+    font-size: 1.2rem;
+  }
+
+  .intro, .mission-statement {
+    font-size: 1rem;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr; /* Stack items vertically */
+    gap: 20px;
+  }
+
+  .about-item h3 {
+    font-size: 1.5rem;
+  }
+
+  .about-item p, .cta-text, .about-cta-button {
+    font-size: 1rem;
+  }
+
+  .about-cta-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+}
+  

@@ -1,0 +1,179 @@
+/* Overall Container */
+.contact-section-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #00c6ff, #00796b); /* Health-inspired Gradient */
+    padding: 20px;
+    flex-direction: column;
+  }
+  
+  /* Contact Section Styling */
+  .contact-section {
+    width: 80%;
+    max-width: 1200px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #333;
+    animation: fadeInUp 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Title */
+  .contact-section h1 {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  /* Tagline */
+  .tagline {
+    font-size: 1.5rem;
+    color: #555;
+    font-weight: 300;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+  
+  /* Rahul Bhatt's Circular Contact Card */
+  .contact-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .contact-card-circle {
+    background: #fff;
+    border-radius: 50%;
+    padding: 30px;
+    width: 320px;
+    height: 320px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .contact-card-circle h3 {
+    font-size: 1.8rem;
+    color: #00796b;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .contact-card-circle p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  
+  .contact-card-circle a {
+    color: #00796b;
+    text-decoration: none;
+  }
+  
+  .contact-card-circle a:hover {
+    text-decoration: underline;
+  }
+  
+  .contact-card-circle .phone-number {
+    color: #00796b;
+    cursor: pointer;
+  }
+  
+  .contact-card-circle .phone-number:hover {
+    text-decoration: underline;
+  }
+  
+  /* Hover Effect for Rahul Bhatt Card */
+  .contact-card-circle:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Company Details Circular Card */
+  .company-details-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .company-card-circle {
+    background: #fff;
+    border-radius: 50%;
+    padding: 40px;
+    width: 350px;
+    height: 350px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .company-card-circle h4 {
+    font-size: 1.6rem;
+    color: #00796b;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  .company-card-circle p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+  
+  /* Hover Effect for Company Details Card */
+  .company-card-circle:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Animation for Fade In Effect */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media screen and (max-width: 768px) {
+    .contact-section {
+      padding: 40px 20px;
+    }
+  
+    .contact-card-circle, .company-card-circle {
+      width: 250px;
+      height: 250px;
+      padding: 20px;
+    }
+  
+    .contact-section h1 {
+      font-size: 2.5rem;
+    }
+  
+    .tagline {
+      font-size: 1.2rem;
+    }
+  }
+  
+  
+  

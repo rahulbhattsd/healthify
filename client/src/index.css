@@ -1,0 +1,83 @@
+/* index.css */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #f0f4f8;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Simple fade-in/out animation on form change */
+.form-container.signup {
+  transform: scale(1);
+}
+
+.form-container.login {
+  transform: scale(1);
+}
+
+.toggle-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #5a67d8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.toggle-button:hover {
+  background-color: #434190;
+}
+
+/* Optional: More visual styling for the form fields (Login/Signup) */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #5a67d8;
+  outline: none;
+  background-color: white;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #6dcbee;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+button[type="submit"]:hover {
+  background-color: #434190;
+}

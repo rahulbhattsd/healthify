@@ -1,0 +1,202 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .full-screen {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a0d8f1, #f0f4f8, #a8e6cf); /* Gradient background */
+    color: #333;
+  }
+  
+  .hero-section {
+    width: 90%; /* Increased width */
+    max-width: 1400px; /* Adjusted max-width */
+    text-align: center;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  }
+  
+  /* Tagline & Subtext */
+  .hero-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00796b;
+    margin-bottom: 20px;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: #555;
+    max-width: 80%; /* Adjusted for more responsive behavior */
+    margin: 0 auto 30px;
+    line-height: 1.5;
+  }
+  
+  /* Buttons */
+  .hero-buttons .hero-btn {
+    margin: 0 10px;
+    padding: 14px 25px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .hero-btn.primary {
+    background-color: #00796b;
+    color: #fff;
+    border: none;
+  }
+  
+  .hero-btn.primary:hover {
+    background-color: #004d40;
+    transform: translateY(-3px);
+  }
+  
+  .hero-btn.secondary {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+  }
+  
+  .hero-btn.secondary:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-3px);
+  }
+  
+  /* Dynamic Form Preview */
+  .form-preview {
+    margin: 40px 0;
+    padding: 30px;
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80%;
+  }
+  
+  /* Features & Benefits Section */
+  .features {
+    display: flex;
+    gap: 30px;
+    margin: 40px auto;
+    max-width: 1200px; /* Increased max-width for more space */
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .feature-card {
+    flex: 1;
+    min-width: 250px; /* Ensures cards are responsive */
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feature-card h3 {
+    font-size: 1.6rem;
+    color: #00796b;
+    margin-bottom: 15px;
+  }
+  
+  .feature-card p {
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  /* Testimonials Section */
+  .testimonials {
+    background-color: #f0f4f8;
+    padding: 60px 0;
+    text-align: center;
+  }
+  
+  .testimonial-card {
+    max-width: 1000px; /* Wider for larger view */
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .testimonial-card p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  .testimonial-card h4 {
+    font-size: 1.3rem;
+    color: #00796b;
+    margin-top: 10px;
+  }
+  
+  /* How it Works Section */
+  .how-it-works {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px 0;
+    gap: 20px;
+    width: 90%;
+  }
+  
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+  }
+  
+  .step-icon {
+    font-size: 2.2rem;
+    color: #00796b;
+  }
+  
+  /* Call-to-Action Section */
+  .cta-section {
+    width: 100%;
+    margin: 40px 0;
+    padding: 40px;
+    background-color: #00796b;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .cta-section .cta-button {
+    background-color: #fff;
+    color: #00796b;
+    padding: 12px 24px;
+    font-size: 1.3rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .cta-section .cta-button:hover {
+    background-color: #004d40;
+    color: #fff;
+  }
+  
+  
+  

@@ -1,0 +1,81 @@
+/* Custom Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, #00c6ff, #00796b); /* Matching gradient background */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #fff; /* White text for brand */
+    letter-spacing: 2px;
+  }
+  
+  .navbar-brand:hover {
+    color: #f0f0f0;
+  }
+  
+  .nav-link {
+    font-size: 1rem;
+    padding: 8px 15px;
+    color: #fff; /* White text for navigation links */
+    transition: all 0.3s ease;
+    margin-bottom: 0; /* Remove bottom margin */
+  }
+  
+  .nav-link:hover {
+    background-color: #004d40; /* Darker greenish-blue background on hover */
+    color: #fff; /* Ensures readability */
+    margin-bottom: 8px; /* Adds a subtle bottom margin on hover */
+  }
+  
+  .nav-dropdown .nav-link {
+    font-size: 1rem;
+    padding: 10px 15px;
+    color: #fff;
+  }
+  
+  .nav-dropdown .nav-link:hover {
+    background-color: #004d40;
+    color: #fff;
+  }
+  
+  .navbar-toggler {
+    border-color: #fff; /* White toggle button border */
+  }
+  
+  .navbar-toggler-icon {
+    background-color: #fff; /* White toggle button icon */
+  }
+  
+  /* Mobile View Adjustments */
+  @media (max-width: 767px) {
+    .navbar {
+      padding: 15px;
+      background: linear-gradient(135deg, #00c6ff, #00796b); /* Maintain gradient background on mobile */
+    }
+  
+    .navbar-collapse {
+      text-align: center;
+    }
+  
+    .navbar-toggler-icon {
+      background-color: #fff;
+    }
+  
+    .nav-link {
+      padding: 12px 20px; /* Larger padding for mobile */
+    }
+  }
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

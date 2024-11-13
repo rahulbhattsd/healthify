@@ -1,0 +1,249 @@
+
+import { StrictMode, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import NavBar from './Navbar.jsx'; // Import the NavBar component
+import Signup from './Signup.jsx';
+import Login from './Login.jsx'; // Import the Login component
+
+const App = () => {
+  const [showLogin, setShowLogin] = useState(false); // Toggle between login and signup
+
+  const toggleForm = () => {
+    setShowLogin(!showLogin); // Toggle between the forms
+  };
+
+  return (
+    <div className="app-container">
+      <NavBar /> {/* Render NavBar at the top of all pages */}
+      <Routes>
+        {/* Define your routes here */}
+        <Route path="/" element={showLogin ? <Login /> : <Signup />} />
+        <Route path="/about" element={<div>About Page</div>} />
+        <Route path="/contact" element={<div>Contact Page</div>} />
+        {/* Add other routes as needed */}
+      </Routes>
+      <button onClick={toggleForm}>
+        {showLogin ? "Don't have an account? Sign up" : "Already have an account? Log in"}
+      </button>
+    </div>
+  );
+};
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Router>
+      <App />
+    </Router>
+  </StrictMode>
+);
+
+
+
+
+
+
+
+
+
+signup.jsx
+import React, { useState } from 'react';
+import './Signup.css'; // Import the CSS file for styling
+
+const Signup = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert("Signup successful!");
+        console.log("Signup successful:", data);
+      } else {
+        alert("Signup failed: " + data.error);
+        console.log("Signup failed:", data);
+      }
+    } catch (error) {
+      alert("Error during signup: " + error.message);
+      console.error("Error during signup:", error);
+    }
+  };
+  
+  return (
+    <form className="signup-form" onSubmit={handleSignup}>
+      <input
+        className="form-input"
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        required
+      />
+      <input
+        className="form-input"
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+      <input
+        className="form-input"
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button className="submit-button" type="submit">Sign Up</button>
+    </form>
+  );
+};
+
+export default Signup;
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
+import './Login.css';
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setIsLoggedIn(true); 
+    }
+  }, []);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Login successful!");
+        localStorage.setItem("token", data.token); 
+        setIsLoggedIn(true); 
+        navigate('/home'); 
+      } else {
+        alert("Login failed: " + data.error);
+      }
+    } catch (error) {
+      alert("Error during login: " + error.message);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    setIsLoggedIn(false); 
+    alert("Logged out successfully!");
+    navigate('/login'); 
+  };
+
+  return (
+    <div className="login-container">
+      {isLoggedIn ? (
+        <button onClick={handleLogout} className="logout-button">Log Out</button>
+      ) : (
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="form-input"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="form-input"
+          />
+          <button type="submit" className="submit-button">Log In</button>
+        </form>
+      )}
+    </div>
+  );
+};
+
+export default Login;
+
+
+
+Navbar
+
+
+// Navbar.jsx
+import React from 'react';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import './Navbar.css'; // Optional: Custom styling for the Navbar
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+const NavBar = () => {
+  return (
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="navbar" fixed="top">
+      <Container>
+        <Navbar.Brand as={Link} to="/" className="navbar-brand">
+          <img
+            src="https://clipground.com/images/health-icon-png-2.png"
+            alt="GitHub Logo"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+          />
+          Healthify
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link as={Link} to="/home" className="nav-link">Home</Nav.Link>
+            <Nav.Link as={Link} to="/about" className="nav-link">About</Nav.Link>
+            <Nav.Link as={Link} to="/contact" className="nav-link">Contact</Nav.Link>
+            <NavDropdown title="User" id="collasible-nav-dropdown" className="nav-dropdown">
+              <NavDropdown.Item as={Link} to="/">Login</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/">SignUp</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item as={Link} to="/">Logout</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+};
+
+export default NavBar;

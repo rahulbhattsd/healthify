@@ -1,0 +1,100 @@
+/* Login form container */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+  }
+  
+  /* Login form styling */
+  .login-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff; /* White background for form */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  /* Form input fields */
+  .form-input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+  
+  /* Focus effect on form input fields */
+  .form-input:focus {
+    border-color: #00796b; /* Green color for focus */
+    background-color: #ffffff;
+    outline: none;
+  }
+  
+  /* Submit button styling */
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #00796b; /* Greenish color */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* Hover effect for submit button */
+  .submit-button:hover {
+    background-color: #004d40; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight raise effect */
+  }
+  
+  /* Focus effect on submit button */
+  .submit-button:focus {
+    outline: none;
+  }
+  
+  /* Logout button styling */
+  .logout-button {
+    padding: 12px;
+    background-color: #e53e3e; /* Red color for logout */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+  }
+  
+  /* Hover effect for logout button */
+  .logout-button:hover {
+    background-color: #c53030;
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+  }
+  
+  /* Focus effect on logout button */
+  .logout-button:focus {
+    outline: none;
+  }
+  .signup-button{
+    width: 100%;
+    padding: 12px;
+    background-color: #6dcbee;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signup-button:hover {
+    background-color: #434190;
+  }
