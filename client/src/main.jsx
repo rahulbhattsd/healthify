@@ -1,3 +1,4 @@
+// main.jsx
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
@@ -9,7 +10,7 @@ import Login from './Login.jsx'; // Import the Login component
 import Home from './Home.jsx'; // Import the Home component
 import About from './About.jsx'; // Import the About component
 import Contact from './Contact.jsx'; // Import the Contact component
-import CustomForm from './Form.jsx'; // Adjust the path if necessary
+import CustomForm from './CustomForm.jsx';
 import FinalPage from './FinalPage.jsx';
 
 const App = () => {
@@ -22,8 +23,8 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/form" element={<CustomForm />} />
-        <Route path='/result' element={<FinalPage/>} />
+        <Route path="/form" element={<CustomForm />} /> {/* Route for the form */}
+        <Route path="/result" element={<FinalPage />} /> {/* Result page after form */}
       </Routes>
     </div>
   );
@@ -36,4 +37,5 @@ createRoot(document.getElementById('root')).render(
     </Router>
   </StrictMode>
 );
+
 

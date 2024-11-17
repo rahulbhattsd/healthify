@@ -1,0 +1,307 @@
+.form-container {
+    width: 90%;
+    max-width: 600px;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 100px;
+    height: 90%;
+    max-height: 900px;
+}
+
+.form-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.form-container h1, .form-container h2, .form-container h3 {
+    color: #4a90e2;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-transform: capitalize;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-container p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 18px;
+    font-family: 'Arial', sans-serif;
+}
+
+.form-container select,
+.form-container textarea,
+.form-container input[type="text"],
+.form-container input[type="number"] {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    margin-bottom: 25px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f7f9fc;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: inherit;
+}
+
+.form-container select:hover,
+.form-container textarea:hover,
+.form-container input[type="text"]:hover,
+.form-container input[type="number"]:hover {
+    border-color: #4a90e2;
+}
+
+.form-container select:focus,
+.form-container textarea:focus,
+.form-container input[type="text"]:focus,
+.form-container input[type="number"]:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
+    background-color: #fff;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 14px;
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Arial', sans-serif;
+}
+
+.form-container button:hover {
+    background-color: #3a7dbe;
+    transform: translateY(-2px);
+}
+
+.form-container button:disabled {
+    background-color: #b0b0b0;
+    cursor: not-allowed;
+}
+
+.form-container label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+}
+
+.form-container input[type="checkbox"],
+.form-container input[type="radio"] {
+    margin-right: 10px;
+}
+
+.form-container textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-container h2,
+.form-container h3 {
+    margin-top: 25px;
+    margin-bottom: 8px;
+}
+
+.form-container .hidden {
+    display: none;
+}
+
+.back-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #6dcbee;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;  
+}
+
+.thank-you-container {
+    background-color: #f9f9f9;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.thank-you-icon {
+    font-size: 3rem;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+
+.processing-message {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.footer-message {
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 20px;
+}
+
+select[multiple] {
+    height: auto;
+    min-height: 120px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+select[multiple] option {
+    padding: 5px;
+}
+
+select[multiple]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+input[type="checkbox"]:checked + label {
+    color: #007bff;
+    font-weight: bold;
+}
+
+input[type="checkbox"]:hover + label {
+    color: #0056b3;
+}
+
+.form-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #343a40;
+}
+
+.progress-bar {
+    margin-bottom: 20px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-button {
+    width: 45%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.prev-button {
+    background-color: #6c757d;
+    border: none;
+    color: white;
+    margin-left: 20px;
+    width: 160px !important;
+}
+
+.next-button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    width: 160px !important;
+}
+
+.form-button:disabled {
+    background-color: #ced4da;
+    cursor: not-allowed;
+}
+
+.form-button:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+.form-button:active:not(:disabled) {
+    background-color: #0056b3;
+}
+/* Import Google Fonts in the head section of your HTML file */
+
+/* Apply fonts to the body and headers */
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Headings font */
+h1, h2, h3 {
+    font-family: 'Roboto', sans-serif;
+    color: #4a90e2;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+/* Form labels and inputs */
+label, select, textarea, input {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Additional styling remains the same as before */
+.form-container {
+    width: 90%;
+    max-width: 600px;
+    padding: 20px 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 100px;
+    height: 90%;
+    max-height: 900px;
+}
+
+.form-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.form-container p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 18px;
+}
+
+.form-container input[type="text"], .form-container input[type="number"], .form-container select, .form-container textarea {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+}

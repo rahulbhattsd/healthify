@@ -2,26 +2,30 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const path = require('path');  // Import path module
-const connectDB = require('./database'); // Ensure database connection module is correct
-const User = require('./User');    // Import the User model
-// Load environment variables at the very start
+const path = require('path');
+const { exec } = require('child_process');  // Import exec to run Python script
+const connectDB = require('./database');
+const User = require('./User');
 require('dotenv').config();
 const app = express();
 
-// Connect to database
+// Connect to the database
 connectDB();
 
 // Middleware
-// Replace with your deployed frontend URL
-const allowedOrigins = ['https://healthify-31ok.onrender.com/']; // Or use a wildcard for all origins
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true, // if you're handling cookies or credentials
-}));
-app.use(express.json());  // Parses incoming JSON requests
+const allowedOrigins = ['https://healthify-31ok.onrender.com', 'http://localhost:5000', 'http://localhost:5173'];
 
-// Serve the static files from the React app
+app.use(cors({
+  origin: ['https://healthify-31ok.onrender.com', 'http://localhost:5000', 'http://localhost:5173'],
+  credentials: true
+}));
+
+
+
+
+app.use(express.json());  // Parse incoming JSON requests
+
+// Serve the React app from the 'client/dist' folder
 app.use(express.static(path.join(__dirname, "client/dist")));
 
 // Serve frontend on all routes
@@ -107,37 +111,44 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// Mock route for AI processing
+
+
+// AI Processing Route
 app.post('/api/processData', async (req, res) => {
-  const formData = req.body;
-
-  // Placeholder for API key and URL
-  const apiUrl = process.env.AI_API_URL || 'https://api.placeholder.com/process';
-  const apiKey = process.env.AI_API_KEY || 'your-api-key-here';
-
-  // Example mock response if API key isn't set
-  if (!apiKey || apiKey === 'your-api-key-here') {
-      return res.json({
-          success: true,
-          message: "Mock AI response",
-          data: { recommendation: "Based on your data, we suggest XYZ." }
-      });
-  }
-
   try {
-      const aiResponse = await axios.post(apiUrl, formData, {
-          headers: {
-              'Authorization': `Bearer ${apiKey}`
-          }
-      });
-      res.json(aiResponse.data);
+    const { question, context } = req.body;
+    
+    // Ensure context and question are provided
+    if (!context || !question) {
+      return res.status(400).json({ error: 'Context and question are required' });
+    }
+
+    // Call the Python script using child_process
+    const pythonScriptPath = path.join(__dirname, 'ai_integration.py');
+    exec(`python ${pythonScriptPath} "${context}" "${question}"`, (error, stdout, stderr) => {
+      if (error) {
+        console.error('Error executing Python script:', error);
+        return res.status(500).json({ error: 'Failed to process AI response' });
+      }
+      if (stderr) {
+        console.error('Python script stderr:', stderr);
+        return res.status(500).json({ error: 'Error in AI response generation' });
+      }
+
+      // Send AI response to the client
+      const aiResponse = stdout.trim();  // Clean up the response from Python script
+      res.json({ success: true, response: aiResponse });
+    });
+
   } catch (error) {
-      res.status(500).json({ error: "Failed to process data." });
+    console.error('AI processing error:', error);
+    res.status(500).json({ error: 'Failed to process data' });
   }
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;  // Use environment variable for port
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
