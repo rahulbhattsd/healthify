@@ -9,6 +9,8 @@ const User = require('./User');
 require('dotenv').config();
 const app = express();
 const fetch = require('node-fetch');
+
+
 // Connect to the database
 connectDB();
 
