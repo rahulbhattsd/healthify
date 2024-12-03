@@ -8,7 +8,7 @@ const connectDB = require('./database');
 const User = require('./User');
 require('dotenv').config();
 const app = express();
-
+const fetch = require('node-fetch');
 // Connect to the database
 connectDB();
 
@@ -111,38 +111,48 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-
-
 // AI Processing Route
+// OpenAI API Key from environment variables
+const API_KEY = process.env.OPENAI_API_KEY;
+
+// Process data route
 app.post('/api/processData', async (req, res) => {
+  const { context, question } = req.body;
+
+  if (!context || !question) {
+    return res.status(400).json({ error: 'Context and question are required' });
+  }
+
   try {
-    const { question, context } = req.body;
-    
-    // Ensure context and question are provided
-    if (!context || !question) {
-      return res.status(400).json({ error: 'Context and question are required' });
-    }
-
-    // Call the Python script using child_process
-    const pythonScriptPath = path.join(__dirname, 'ai_integration.py');
-    exec(`python ${pythonScriptPath} "${context}" "${question}"`, (error, stdout, stderr) => {
-      if (error) {
-        console.error('Error executing Python script:', error);
-        return res.status(500).json({ error: 'Failed to process AI response' });
-      }
-      if (stderr) {
-        console.error('Python script stderr:', stderr);
-        return res.status(500).json({ error: 'Error in AI response generation' });
-      }
-
-      // Send AI response to the client
-      const aiResponse = stdout.trim();  // Clean up the response from Python script
-      res.json({ success: true, response: aiResponse });
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "gpt-4", // Use GPT-4 model
+        messages: [
+          { role: "system", content: "You are a health assistant providing personalized advice." },
+          { role: "user", content: `Context: ${context}\n\nQuestion: ${question}` },
+        ],
+        max_tokens: 500,
+      }),
     });
 
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("OpenAI API Error:", error);
+      return res.status(response.status).json({ error: error.message || "Failed to get response from OpenAI" });
+    }
+
+    const data = await response.json();
+    const aiResponse = data.choices[0].message.content;
+
+    res.json({ success: true, response: aiResponse });
   } catch (error) {
-    console.error('AI processing error:', error);
-    res.status(500).json({ error: 'Failed to process data' });
+    console.error("Error processing AI request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

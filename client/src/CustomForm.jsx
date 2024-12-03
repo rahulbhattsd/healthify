@@ -15,17 +15,24 @@ import Step12 from './formSteps/Step12';
 import Step13 from './formSteps/Step13';
 import Step14 from './formSteps/Step14';
 import Step15 from './formSteps/Step15';
-
-
+import './CustomForm.css';
 const CustomForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     ethnicGroup: '',
     sexAssignedAtBirth: '',
-    symptoms: '',
     lifestyle: { exercise: '', smoke: '', alcohol: '', diet: '' },
     allergies: { medications: '', foods: '', environment: '', others: '' },
-    familyHistory: { selectedConditions: [], heartDisease: '', bloodPressure: '', diabetes: '', cancer: '', asthma: '', mentalHealth: '', others: '' },
+    familyHistory: { 
+      selectedConditions: [], 
+      heartDisease: '', 
+      bloodPressure: '', 
+      diabetes: '', 
+      cancer: '', 
+      asthma: '', 
+      mentalHealth: '', 
+      others: '' 
+    },
     medications: '',
     sleep: { hours: '', troubleSleeping: '', rested: '', comments: '' },
     mentalHealth: { stressLevel: '', anxiety: '', depression: '', comments: '' },
@@ -43,21 +50,56 @@ const CustomForm = () => {
       },
       symptomsSeverity: '',
     },
+    age: '',
+    height: '',
+    weight: '',
+    fatigue: false,
+    fever: false,
+    pain: false,
+    shortnessOfBreath: false,
+    nausea: false,
+    dizziness: false,
+    headache: false,
+    cough: false,
+    soreThroat: false,
+    runnyNose: false,
+    muscleAche: false,
+    lossOfAppetite: false,
+    chestPain: false,
+    otherSymptoms: '',
   });
+  
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
   
-    // Here you can perform validations if needed
-    if (!formData.ethnicGroup || !formData.sexAssignedAtBirth) {
-      alert("Please fill in all required fields.");
-      return;
+    const context = "Patient reports fatigue and occasional dizziness";
+    const question = "What could be the possible causes?";
+  
+    try {
+      const response = await fetch('/api/processData', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ context, question }),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        console.log("AI Response:", data.response);
+        alert(`AI Response: ${data.response}`);
+      } else {
+        console.error("Error:", data.error);
+        alert("Failed to get AI response. Try again later.");
+      }
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+      alert("An error occurred. Please try again.");
     }
-  
-    console.log("Form data submitted:", formData);
   };
   
-  const updateNestedField = (name, value) => {
+  
+const updateNestedField = (name, value) => {
     const keys = name.split('.');
     setFormData(prevState => {
       let newState = { ...prevState };
@@ -71,29 +113,58 @@ const CustomForm = () => {
     });
   };
 
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+
+    // Handle checkboxes and nested fields
+    if (type === 'checkbox') {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else if (name.includes('.')) {
+      // Update nested fields using dot notation
+      const keys = name.split('.');
+      setFormData((prevData) => {
+        const updatedData = { ...prevData };
+        let currentLevel = updatedData;
+        keys.forEach((key, index) => {
+          if (index === keys.length - 1) {
+            currentLevel[key] = value;
+          } else {
+            currentLevel = currentLevel[key];
+          }
+        });
+        return updatedData;
+      });
+    } else {
+      // Handle top-level fields
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+  
+  
   const handleSelectChange = (e) => {
     const { name, value } = e.target;
   
-    // Split the name by periods to handle nested properties (e.g., "healthGoals.primaryGoal")
-    const keys = name.split('.');
-  
-    setFormData((prevFormData) => {
-      let updatedFormData = { ...prevFormData };
-  
-      // Dynamically update the nested state
-      let current = updatedFormData;
-      for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
-          current[keys[i]] = {}; // Initialize any missing intermediate objects
-        }
-        current = current[keys[i]];
-      }
-      current[keys[keys.length - 1]] = value;
-  
-      return updatedFormData;
-    });
+    if (name.includes('.')) {
+      // Handle nested keys with dot notation using updateNestedField
+      updateNestedField(name, value);
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   
+  
+  
+  
+
   const handleNextStep = () => {
     setStep((prevStep) => Math.min(prevStep + 1, 15)); // Ensure step doesn't go beyond 15
   };
@@ -135,7 +206,7 @@ const CustomForm = () => {
       case 14:
         return <Step14 formData={formData} handleSelectChange={handleSelectChange} onNext={handleNextStep} />;
       case 15:
-        return <Step15 formData={formData} handleSelectChange={handleSelectChange} onNext={handleNextStep} />;
+        return <Step15 formData={formData} handleSelectChange={handleSelectChange} onSubmit={handleSubmit} />;
       default:
         return <div>Step not found</div>;
     }
@@ -143,24 +214,32 @@ const CustomForm = () => {
 
   return (
     <div className="form-container">
-      <h1>Welcome to Healthify</h1>
-      <ProgressBar now={progressPercentage} label={`${Math.round(progressPercentage)}%`} />
+      <h1>Transforming Your Health, One Step at a Time!</h1>
+      <ProgressBar className='bar' now={progressPercentage} label={`${Math.round(progressPercentage)}%`} />
       <StepRenderer />
 
-    <div className="buttons-container">
-       <Button 
-        className="form-button prev-button" 
-        onClick={handlePreviousStep} 
-        disabled={step === 1}>
-        Previous
-       </Button>
+      <div className="buttons-container">
+        <Button 
+          className="form-button prev-button" 
+          onClick={handlePreviousStep} 
+          disabled={step === 1}>
+          Previous
+        </Button>
 
-       <Button 
-        className="form-button next-button" 
-        onClick={handleNextStep}>
-        Next
-      </Button>
-  </div>
+        {step < 15 ? (
+          <Button 
+            className="form-button next-button" 
+            onClick={handleNextStep}>
+            Next
+          </Button>
+        ) : (
+          <Button 
+            className="form-button submit-button" 
+            onClick={handleSubmit}>
+            Submit
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 const express = require('express');
 const User = require('./User');
 const router = express.Router();
-const axios = require('axios');
+
 
 router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
@@ -42,26 +42,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
-// Your Hugging Face API key
-const API_KEY = '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';
-
-router.post('/ai-process', async (req, res) => {
-  try {
-    const { textInput } = req.body;
-    const response = await axios.post('https://api-inference.huggingface.co/models/MedAlpaca-7B', {
-      inputs: textInput,
-    }, {
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-      },
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error("AI process error:", error);
-    res.status(500).send('Error in processing AI request');
-  }
-});
 
 
 

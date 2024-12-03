@@ -5,20 +5,31 @@ import './Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NavBar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  // This effect will run when the component mounts and when localStorage changes
   useEffect(() => {
-    const updateLoginStatus = () => setIsLoggedIn(!!localStorage.getItem('token'));
-    window.addEventListener('storage', updateLoginStatus);
+    const checkLoginStatus = () => {
+      // Check if the token exists in localStorage
+      setIsLoggedIn(!!localStorage.getItem('token'));
+    };
 
-    return () => window.removeEventListener('storage', updateLoginStatus);
-  }, []);
+    // Check the login status once on component mount
+    checkLoginStatus();
+
+    // Listen for changes to localStorage
+    window.addEventListener('storage', checkLoginStatus);
+
+    // Cleanup the event listener on unmount
+    return () => window.removeEventListener('storage', checkLoginStatus);
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const handleLogout = () => {
+    // Remove token from localStorage and update state
     localStorage.removeItem('token');
-    setIsLoggedIn(false);
-    navigate('/login');
+    setIsLoggedIn(false); // Update state to reflect logout
+    navigate('/login'); // Redirect to login page
   };
 
   return (
@@ -58,6 +69,7 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
 
 
 

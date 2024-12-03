@@ -1,0 +1,81 @@
+/* General container styling */
+.container {
+    max-width: 1000px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+  }
+  
+  h2 {
+    text-align: center !important;
+    margin-bottom: 20px !important;
+  }
+  
+  h3 {
+    color: #333 !important;
+    margin-top: 20px !important;
+  }
+  
+  ul {
+    list-style-type: none !important;
+    padding: 0 !important;
+  }
+  
+  ul li {
+    margin-bottom: 10px !important;
+  }
+  
+  ul li strong {
+    font-weight: bold !important;
+  }
+  
+  /* Styling for the response card */
+  .response-card {
+    background-color: #f9f9f9 !important;
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .buttons-container {
+    text-align: center !important;
+    margin-top: 20px !important;
+  }
+  
+  /* Responsive design for small screens */
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px !important;
+    }
+  
+    .response-card {
+      padding: 15px !important;
+    }
+  
+    h2 {
+      font-size: 1.5em !important;
+    }
+  
+    h3 {
+      font-size: 1.2em !important;
+    }
+  
+    ul li {
+      font-size: 14px !important;
+    }
+  }
+  .form-container {
+    max-width: 600px !important;
+    margin: 120 auto !important;
+    padding: 20px 30px!important;
+    box-sizing: border-box !important;
+    max-height: 4000px !important; /* Set the max height to 4000px */
+    overflow-y: auto !important; /* Make the container scrollable if content exceeds the max height */
+    background-color: #fff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    
+   
+  }  

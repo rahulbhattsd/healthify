@@ -8,7 +8,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('userLoggedIn')) {
       navigate('/form'); // Redirect to form if logged in
     } else {
       navigate('/login'); // Redirect to login/signup if not logged in

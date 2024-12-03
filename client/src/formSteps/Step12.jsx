@@ -1,9 +1,8 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import './Steps.css';
 
-const Step12 = ({ formData, handleSelectChange, onNext }) => {
-  // Ensure medicalSupervision is defined before accessing its properties
+const Step12 = ({ formData, handleChange, handleSelectChange }) => {
   const medicalSupervision = formData.healthGoals?.medicalSupervision || {};
 
   return (
@@ -22,21 +21,9 @@ const Step12 = ({ formData, handleSelectChange, onNext }) => {
           <option value="no">No</option>
         </Form.Control>
       </Form.Group>
-      <Form.Group>
-        <Form.Label>If yes, please specify the condition:</Form.Label>
-        <Form.Control
-          type="text"
-          name="healthGoals.medicalSupervision.supervisionCondition"
-          value={medicalSupervision.supervisionCondition || ''}
-          onChange={handleSelectChange}
-          placeholder="Condition being supervised"
-        />
-      </Form.Group>
-      <Button variant="primary" onClick={onNext}>Next</Button>
+      
     </div>
   );
 };
 
 export default Step12;
-
-

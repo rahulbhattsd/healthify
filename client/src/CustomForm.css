@@ -1,0 +1,27 @@
+.form-button{
+    width: 100%;
+    padding: 16px;
+    background-color: #4A90E2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-family: 'Arial', sans-serif; 
+    margin-left: 20px;  
+    margin-top: 10px;
+}
+.form-button:hover{
+    background-color: #0069D9;
+    transform: translateY(-3px);
+}
+.buttons-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.bar{
+    margin-bottom: 15px;
+}
