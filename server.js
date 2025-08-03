@@ -18,9 +18,10 @@ connectDB();
 const allowedOrigins = ['https://healthify-31ok.onrender.com', 'http://localhost:5000', 'http://localhost:5173'];
 
 app.use(cors({
-  origin: ['https://healthify-31ok.onrender.com', 'http://localhost:5000', 'http://localhost:5173'],
-  credentials: true
+  origin: allowedOrigins,
+  credentials: true, // If you're using cookies or authorization headers
 }));
+
 
 
 

@@ -3,7 +3,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+import Landing from './Landing.jsx'; // 👈 Import Landing page component
 import NavBar from './Navbar.jsx'; // Import the NavBar component
 import Signup from './Signup.jsx';
 import Login from './Login.jsx'; // Import the Login component
@@ -25,6 +25,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/form" element={<CustomForm />} /> {/* Route for the form */}
         <Route path="/result" element={<FinalPage />} /> {/* Result page after form */}
+        <Route path="/landing" element={<Landing />} /> {/* 👈 Landing page route */}
+
       </Routes>
     </div>
   );

@@ -1,75 +1,361 @@
-/* Custom Navbar Styling */
+/* Futuristic Navbar Styling */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
 .navbar {
-    background: linear-gradient(135deg, #00c6ff, #00796b); /* Matching gradient background */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 10px 20px;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 25%, #00d4aa 50%, #00796b 75%, #004d40 100%);
+  box-shadow: 
+    0 4px 20px rgba(0, 198, 255, 0.3),
+    0 0 40px rgba(0, 114, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 15px 20px;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 198, 255, 0.3);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 4s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.navbar-brand {
+  font-family: 'Orbitron', monospace;
+  font-weight: 900;
+  font-size: 2.2rem;
+  color: #fff;
+  letter-spacing: 3px;
+  text-shadow: 
+    0 0 10px rgba(0, 198, 255, 0.8),
+    0 0 20px rgba(0, 198, 255, 0.6),
+    0 0 30px rgba(0, 198, 255, 0.4);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.navbar-brand::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00c6ff, #00d4aa);
+  transition: width 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: #00d4aa;
+  transform: translateY(-2px);
+  text-shadow: 
+    0 0 15px rgba(0, 212, 170, 0.9),
+    0 0 25px rgba(0, 212, 170, 0.7),
+    0 0 35px rgba(0, 212, 170, 0.5);
+  text-decoration: none;
+}
+
+.navbar-brand:hover::after {
+  width: 100%;
+}
+
+.navbar-brand img {
+  filter: drop-shadow(0 0 10px rgba(0, 198, 255, 0.6));
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover img {
+  filter: drop-shadow(0 0 15px rgba(0, 212, 170, 0.8));
+  transform: rotate(360deg);
+}
+
+.nav-link {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 400;
+  padding: 12px 20px;
+  color: #fff;
+  transition: all 0.3s ease;
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 198, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.nav-link:hover::before {
+  left: 100%;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00c6ff, #00d4aa);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  background: rgba(0, 198, 255, 0.1);
+  color: #00d4aa;
+  transform: translateY(-3px);
+  box-shadow: 
+    0 5px 15px rgba(0, 198, 255, 0.3),
+    0 0 25px rgba(0, 198, 255, 0.2);
+  text-shadow: 0 0 10px rgba(0, 212, 170, 0.8);
+  text-decoration: none;
+}
+
+.nav-link:hover::after,
+.nav-link:focus::after {
+  width: 80%;
+}
+
+/* Dropdown Styling */
+.nav-item.dropdown .nav-link.dropdown-toggle {
+  position: relative;
+}
+
+.nav-item.dropdown .nav-link.dropdown-toggle::after {
+  display: none;
+}
+
+.nav-item.dropdown .nav-link.dropdown-toggle::before {
+  content: '▼';
+  font-size: 0.8rem;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.nav-item.dropdown .nav-link.dropdown-toggle[aria-expanded="true"]::before {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.dropdown-menu {
+  background: linear-gradient(135deg, rgba(0, 198, 255, 0.95), rgba(0, 121, 107, 0.95));
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(0, 198, 255, 0.3);
+  border-radius: 15px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 50px rgba(0, 198, 255, 0.2);
+  padding: 10px 0;
+  margin-top: 10px;
+  animation: dropdownSlide 0.3s ease;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  font-family: 'Orbitron', monospace;
+  color: #fff;
+  padding: 12px 25px;
+  transition: all 0.3s ease;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 0;
+  background: linear-gradient(180deg, #00c6ff, #00d4aa);
+  transition: height 0.3s ease;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: rgba(0, 198, 255, 0.2);
+  color: #00d4aa;
+  transform: translateX(10px);
+  text-shadow: 0 0 8px rgba(0, 212, 170, 0.8);
+}
+
+.dropdown-item:hover::before,
+.dropdown-item:focus::before {
+  height: 100%;
+}
+
+
+/* Scrolled Navbar Effect */
+.navbar.scrolled {
+  background: rgba(0, 77, 64, 0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 2px 20px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(0, 198, 255, 0.1);
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 991px) {
+  .navbar {
+    padding: 12px 15px;
   }
   
-  .navbar-brand {
-    font-weight: bold;
-    font-size: 1.8rem;
-    color: #fff; /* White text for brand */
-    letter-spacing: 2px;
-  }
-  
-  .navbar-brand:hover {
-    color: #f0f0f0;
+  .navbar-collapse {
+    background: rgba(0, 77, 64, 0.98);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    margin-top: 15px;
+    padding: 20px;
+    border: 1px solid rgba(0, 198, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
   
   .nav-link {
-    font-size: 1rem;
-    padding: 8px 15px;
-    color: #fff; /* White text for navigation links */
-    transition: all 0.3s ease;
-    margin-bottom: 0; /* Remove bottom margin */
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    margin: 5px 0;
+    text-align: center;
+    border-radius: 10px;
   }
   
-  .nav-link:hover {
-    background-color: #004d40; /* Darker greenish-blue background on hover */
-    color: #fff; /* Ensures readability */
-    margin-bottom: 8px; /* Adds a subtle bottom margin on hover */
+  .dropdown-menu {
+    background: rgba(0, 77, 64, 0.9);
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    margin-top: 5px;
+    position: static;
+    display: block;
+    width: 100%;
+    border-radius: 10px;
   }
   
-  .nav-dropdown .nav-link {
-    font-size: 1rem;
-    padding: 10px 15px;
-    color: #fff;
+  .navbar-brand {
+    font-size: 1.8rem;
   }
   
-  .nav-dropdown .nav-link:hover {
-    background-color: #004d40;
-    color: #fff;
+  /* Fix for mobile dropdown */
+  .nav-item.dropdown .dropdown-menu {
+    margin-top: 0;
+    border-radius: 0 0 10px 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    padding: 10px 12px;
+  }
+  
+  .navbar-brand {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+  
+  .nav-link {
+    font-size: 1.1rem;
+    padding: 12px 20px;
   }
   
   .navbar-toggler {
-    border-color: #fff; /* White toggle button border */
+    width: 40px;
+    height: 35px;
+    padding: 6px 8px;
   }
   
   .navbar-toggler-icon {
-    background-color: #fff; /* White toggle button icon */
+    width: 22px;
+    height: 16px;
+  }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar-brand,
+  .nav-link,
+  .dropdown-item,
+  .navbar-toggler {
+    animation: none;
+    transition: none;
   }
   
-  /* Mobile View Adjustments */
-  @media (max-width: 767px) {
-    .navbar {
-      padding: 15px;
-      background: linear-gradient(135deg, #00c6ff, #00796b); /* Maintain gradient background on mobile */
-    }
-  
-    .navbar-collapse {
-      text-align: center;
-    }
-  
-    .navbar-toggler-icon {
-      background-color: #fff;
-    }
-  
-    .nav-link {
-      padding: 12px 20px; /* Larger padding for mobile */
-    }
+  .navbar::before {
+    display: none;
   }
- 
+}
+
+/* Focus States for Accessibility */
+.nav-link:focus,
+.dropdown-item:focus,
+.navbar-toggler:focus {
+  outline: 2px solid #00d4aa;
+  outline-offset: 2px;
+}
+
+/* Ensure proper z-index for dropdown */
+.navbar .dropdown-menu {
+  z-index: 1050;
+}
+
+/* Remove Bootstrap's default toggler icon */
+.navbar-toggler:focus {
+  box-shadow: 0 0 15px rgba(0, 212, 170, 0.5);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    box-shadow: 
+      0 4px 20px rgba(0, 198, 255, 0.4),
+      0 0 40px rgba(0, 114, 255, 0.3);
+  }
+}
   
+
   
   
   
