@@ -8,22 +8,22 @@ const Landing = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
+    // const handleMouseMove = (e) => {
+    //   setMousePosition({ x: e.clientX, y: e.clientY });
+    // };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  //   window.addEventListener('mousemove', handleMouseMove);
+  //   return () => window.removeEventListener('mousemove', handleMouseMove);
+  // 
+  }, []
+  );
 
   const handleStart = () => {
     navigate('/');
   };
-
-  const handleLearnMore = () => {
-    // You can navigate elsewhere if needed
-    console.log('Navigating to learn more...');
-  };
+const handleLeAbout = () => {
+  navigate('/about');
+};
 
   const handleStartFree = () => {
     navigate('/');
@@ -89,7 +89,7 @@ const Landing = () => {
                 <span>Start Your Journey</span>
                 <div className="btn-glow"></div>
               </button>
-              <button className="hero-btn secondary" onClick={handleLearnMore}>
+              <button className="hero-btn secondary" onClick={handleLeAbout}>
                 <span>Discover More</span>
               </button>
             </div>
