@@ -65,13 +65,13 @@ const NavBar = () => {
             className="modern-brand"
             onClick={handleNavClick}
           >
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/1040/1040238.png"
-              alt="Healthify Logo"
-              width="28"
-              height="28"
-              className="d-inline-block align-top brand-icon"
-            />
+        <img
+  src="/logo.png"
+  alt="Healthify Logo"
+  width="28"
+  height="28"
+  className="d-inline-block align-top brand-icon"
+/>
             Healthify
           </Navbar.Brand>
           <Navbar.Toggle
