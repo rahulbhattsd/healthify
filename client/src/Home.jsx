@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Row, Col } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import './Home.css';
 
@@ -8,43 +8,50 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (localStorage.getItem('userLoggedIn')) {
-      navigate('/form'); // Redirect to form if logged in
+    if (localStorage.getItem('userLoggedIn') || localStorage.getItem('token')) {
+      navigate('/form');
     } else {
-      navigate('/login'); // Redirect to login/signup if not logged in
+      navigate('/login');
     }
   };
- const handelLernMore=()=>{
-  navigate('/about');
- } 
+
+  const handleLearnMore = () => {
+    navigate('/about');
+  };
 
   return (
-    <div className="home full-screen">
+    <div className="home-wrapper">
+      {/* HERO */}
       <section className="hero-section">
-        <Container className="hero-content">
+        <Container>
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            className="hero-content"
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.8 }}
           >
-            <h1 className="hero-title">Welcome to Healthify</h1>
-            <p className="hero-subtitle">Your personal health assistant powered by AI</p>
+            <h1 className="hero-title">
+              AI-Powered <span>Health Assistant</span>
+            </h1>
+            <p className="hero-subtitle">
+              Analyze symptoms, get smart suggestions, and improve your health using AI.
+            </p>
+
             <div className="hero-buttons">
-              <Button variant="primary" className="hero-btn" onClick={handleGetStarted}>
+              <Button className="btn-primary-custom" onClick={handleGetStarted}>
                 Get Started
               </Button>
-              <Button variant="outline-secondary" className="hero-btn" onClick={handelLernMore}>Learn More</Button>
+              <Button className="btn-outline-custom" onClick={handleLearnMore}>
+                Learn More
+              </Button>
             </div>
           </motion.div>
         </Container>
       </section>
+
+     
     </div>
   );
 };
 
 export default Home;
-
-
-
-
-

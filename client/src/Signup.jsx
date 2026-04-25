@@ -1,44 +1,40 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import './Signup.css'; // Import the CSS file for styling
+import { useNavigate } from 'react-router-dom';
+import { buildApiUrl } from './api';
+import './Signup.css';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
-  // Define the API URL based on the environment
-  const apiUrl = process.env.NODE_ENV === 'production' 
-    ? "https://healthify-31ok.onrender.com/api/signup" 
-    : "http://localhost:5000/api/signup";
+  const handleSignup = async (event) => {
+    event.preventDefault();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-  
     try {
-      const response = await fetch(apiUrl, {
-        method: "POST",
+      const response = await fetch(buildApiUrl('/api/signup'), {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, email, password }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
-        alert("Signup successful!");
-        console.log("Signup successful:", data);
-        // Automatically log the user in by storing the token and redirecting
-        localStorage.setItem("token", data.token);
-        navigate('/form'); // Redirect directly to the main page after auto-login
+        alert('Signup successful!');
+        console.log('Signup successful:', data);
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('token', data.user?.id || email || username);
+        navigate('/form');
       } else {
-        alert("Signup failed: " + data.error);
-        console.log("Signup failed:", data);
+        alert(`Signup failed: ${data.error}`);
+        console.log('Signup failed:', data);
       }
     } catch (error) {
-      alert("Error during signup: " + error.message);
-      console.error("Error during signup:", error);
+      alert(`Error during signup: ${error.message}`);
+      console.error('Error during signup:', error);
     }
   };
 
@@ -49,7 +45,7 @@ const Signup = () => {
         type="text"
         placeholder="Username"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(event) => setUsername(event.target.value)}
         required
       />
       <input
@@ -57,7 +53,7 @@ const Signup = () => {
         type="email"
         placeholder="Email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(event) => setEmail(event.target.value)}
         required
       />
       <input
@@ -65,17 +61,14 @@ const Signup = () => {
         type="password"
         placeholder="Password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(event) => setPassword(event.target.value)}
         required
       />
-      <button className="submit-button" type="submit">Sign Up</button>
+      <button className="submit-button" type="submit">
+        Sign Up
+      </button>
     </form>
   );
 };
 
 export default Signup;
-
-
-
-
-
