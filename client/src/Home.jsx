@@ -8,11 +8,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (localStorage.getItem('userLoggedIn') || localStorage.getItem('token')) {
-      navigate('/form');
-    } else {
-      navigate('/login');
-    }
+    navigate('/form');
   };
 
   const handleLearnMore = () => {
