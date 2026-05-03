@@ -19,14 +19,14 @@ const Landing = () => {
   );
 
   const handleStart = () => {
-    navigate('/');
+    navigate('/form');
   };
 const handleLeAbout = () => {
   navigate('/about');
 };
 
   const handleStartFree = () => {
-    navigate('/');
+    navigate('/form');
   };
 
   const FeatureCard = ({ icon, title, description, delay = 0 }) => (
