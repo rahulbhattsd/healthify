@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const authMiddleware = (req, res, next) => {
+  if (!process.env.JWT_SECRET) {
+    return res.status(503).json({ error: 'Authentication is not configured' });
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {

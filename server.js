@@ -1,12 +1,12 @@
 'use strict';
 
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const fs = require('fs');
 const helmet = require('helmet');
+const jwt = require('jsonwebtoken');
 const path = require('path');
-const rateLimit = require('express-rate-limit');
 const Groq = require('groq-sdk');
 
 require('dotenv').config();
@@ -24,13 +24,72 @@ const DEFAULT_PORT = 5000;
 const GROQ_TIMEOUT_MS = 45000;
 const MAX_TOKENS = 1500;
 
-const ALLOWED_ORIGINS = new Set([
+const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:3000',
   'http://localhost:4173',
   'http://localhost:5000',
   'http://localhost:5173',
   'https://healthify-31ok.onrender.com',
-]);
+];
+
+function splitEnvList(value) {
+  return (value || '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function normalizeOrigin(value) {
+  if (!value) {
+    return '';
+  }
+
+  try {
+    return new URL(value).origin;
+  } catch (_error) {
+    return value.replace(/\/$/, '');
+  }
+}
+
+const allowedOrigins = new Set(
+  [
+    ...DEFAULT_ALLOWED_ORIGINS,
+    process.env.CLIENT_ORIGIN,
+    process.env.FRONTEND_URL,
+    process.env.RENDER_EXTERNAL_URL,
+    ...splitEnvList(process.env.CLIENT_ORIGINS),
+  ]
+    .map(normalizeOrigin)
+    .filter(Boolean),
+);
+
+const apiConnectOrigins = [
+  process.env.VITE_API_BASE_URL,
+  process.env.PUBLIC_API_BASE_URL,
+  process.env.API_BASE_URL,
+]
+  .map(normalizeOrigin)
+  .filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  if (!origin) {
+    return true;
+  }
+
+  if (allowedOrigins.has(origin)) {
+    return true;
+  }
+
+  try {
+    const { hostname, protocol } = new URL(origin);
+    return (
+      protocol === 'https:' &&
+      (hostname === 'onrender.com' || hostname.endsWith('.onrender.com'))
+    );
+  } catch (_error) {
+    return false;
+  }
+}
 
 const groqApiKey = (process.env.GROQ_API_KEY || '').trim();
 const groq =
@@ -45,7 +104,14 @@ if (!groq) {
   );
 }
 
+if (!process.env.JWT_SECRET) {
+  console.warn(
+    '[WARN] JWT_SECRET is not set. Login and signup will work, but protected JWT routes will be unavailable.',
+  );
+}
+
 const app = express();
+app.set('trust proxy', 1);
 
 connectDB();
 
@@ -57,7 +123,7 @@ app.use(
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         imgSrc: ["'self'", 'data:'],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", ...allowedOrigins, ...apiConnectOrigins],
       },
     },
     crossOriginEmbedderPolicy: false,
@@ -67,7 +133,7 @@ app.use(
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || ALLOWED_ORIGINS.has(origin)) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 
@@ -82,11 +148,9 @@ app.use(
 app.use(express.json({ limit: '1mb' }));
 
 app.use(
-  rateLimit({
+  createRateLimiter({
     windowMs: 60 * 1000,
     max: 60,
-    standardHeaders: true,
-    legacyHeaders: false,
     message: { error: 'Too many requests, please try again in a minute.' },
   }),
 );
@@ -102,6 +166,49 @@ function withTimeout(promise, ms, label) {
   return Promise.race([promise, timeoutPromise]).finally(() => {
     clearTimeout(timeoutId);
   });
+}
+
+function createRateLimiter({ windowMs, max, message }) {
+  const hits = new Map();
+
+  const cleanupTimer = setInterval(() => {
+    const now = Date.now();
+
+    for (const [key, entry] of hits.entries()) {
+      if (entry.resetAt <= now) {
+        hits.delete(key);
+      }
+    }
+  }, windowMs);
+
+  cleanupTimer.unref?.();
+
+  return (req, res, next) => {
+    const now = Date.now();
+    const key = req.ip?.replace(/^::ffff:/, '') || req.socket.remoteAddress || 'unknown';
+    const current = hits.get(key);
+    const entry =
+      current && current.resetAt > now
+        ? current
+        : { count: 0, resetAt: now + windowMs };
+
+    entry.count += 1;
+    hits.set(key, entry);
+
+    const remaining = Math.max(max - entry.count, 0);
+    const resetSeconds = Math.ceil((entry.resetAt - now) / 1000);
+
+    res.setHeader('RateLimit-Limit', String(max));
+    res.setHeader('RateLimit-Remaining', String(remaining));
+    res.setHeader('RateLimit-Reset', String(resetSeconds));
+
+    if (entry.count > max) {
+      res.setHeader('Retry-After', String(resetSeconds));
+      return res.status(429).json(message);
+    }
+
+    return next();
+  };
 }
 
 function clientSafeError(error) {
@@ -139,6 +246,21 @@ function log(level, msg, meta) {
   }
 }
 
+function createAuthToken(user) {
+  if (!process.env.JWT_SECRET) {
+    return null;
+  }
+
+  return jwt.sign(
+    {
+      id: user._id.toString(),
+      email: user.email,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1d' },
+  );
+}
+
 app.get('/api/healthcheck', (_req, res) => {
   res.json({
     status: 'ok',
@@ -150,16 +272,28 @@ app.get('/api/healthcheck', (_req, res) => {
 });
 
 app.post('/api/signup', async (req, res) => {
-  const { username, email, password } = req.body ?? {};
+  const username = String(req.body?.username || '').trim();
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const password = String(req.body?.password || '');
 
-  if (!username?.trim() || !email?.trim() || !password) {
+  if (!username || !email || !password) {
     return res
       .status(400)
       .json({ error: 'username, email and password are all required.' });
   }
 
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ error: 'Password must be at least 6 characters long.' });
+  }
+
   try {
-    const existingUser = await User.findOne({ email: email.trim().toLowerCase() });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
         .status(409)
@@ -168,8 +302,8 @@ app.post('/api/signup', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = await new User({
-      username: username.trim(),
-      email: email.trim().toLowerCase(),
+      username,
+      email,
       password: hashedPassword,
     }).save();
 
@@ -177,6 +311,7 @@ app.post('/api/signup', async (req, res) => {
 
     return res.status(201).json({
       message: 'Account created successfully.',
+      token: createAuthToken(newUser),
       user: {
         id: newUser._id,
         username: newUser.username,
@@ -184,6 +319,16 @@ app.post('/api/signup', async (req, res) => {
       },
     });
   } catch (error) {
+    if (error?.code === 11000) {
+      const duplicateField = Object.keys(error.keyPattern || {})[0] || 'account';
+      const message =
+        duplicateField === 'username'
+          ? 'That username is already taken.'
+          : 'An account with that email already exists.';
+
+      return res.status(409).json({ error: message });
+    }
+
     log('error', 'signup.error', { message: error.message });
     return res
       .status(500)
@@ -192,14 +337,15 @@ app.post('/api/signup', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body ?? {};
+  const email = String(req.body?.email || '').trim().toLowerCase();
+  const password = String(req.body?.password || '');
 
-  if (!email?.trim() || !password) {
+  if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
 
   try {
-    const user = await User.findOne({ email: email.trim().toLowerCase() });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
@@ -213,6 +359,7 @@ app.post('/api/login', async (req, res) => {
 
     return res.status(200).json({
       message: 'Login successful.',
+      token: createAuthToken(user),
       user: {
         id: user._id,
         username: user.username,
@@ -233,11 +380,9 @@ app.get('/api/protected', authMiddleware, (req, res) => {
   res.json({ message: `Welcome ${req.user.email}, you are authorised!` });
 });
 
-const adviceLimiter = rateLimit({
+const adviceLimiter = createRateLimiter({
   windowMs: 60 * 1000,
   max: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
   message: { error: 'Too many advice requests. Please wait a minute.' },
 });
 

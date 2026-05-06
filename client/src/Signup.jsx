@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { buildApiUrl } from './api';
+import { buildApiUrl, readJsonResponse } from './api';
 import './Signup.css';
 
 const Signup = () => {
@@ -21,12 +21,15 @@ const Signup = () => {
         body: JSON.stringify({ username, email, password }),
       });
 
-      const data = await response.json();
+      const data = await readJsonResponse(response);
       if (response.ok) {
         alert('Signup successful!');
         console.log('Signup successful:', data);
         localStorage.setItem('userLoggedIn', 'true');
-        localStorage.setItem('token', data.user?.id || email || username);
+        localStorage.setItem('token', data.token || data.user?.id || email || username);
+        if (data.user) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
         navigate('/form');
       } else {
         alert(`Signup failed: ${data.error}`);

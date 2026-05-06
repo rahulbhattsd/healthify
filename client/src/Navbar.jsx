@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Navbar.css';
@@ -38,6 +38,7 @@ const NavBar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userLoggedIn');
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
     setExpanded(false);
     navigate('/login');

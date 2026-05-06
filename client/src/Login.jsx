@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { buildApiUrl } from './api';
+import { buildApiUrl, readJsonResponse } from './api';
 import './Login.css';
 
 const Login = () => {
@@ -26,12 +26,15 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data = await readJsonResponse(response);
       if (response.ok) {
         alert('Login successful!');
         setIsLoggedIn(true);
         localStorage.setItem('userLoggedIn', 'true');
-        localStorage.setItem('token', data.user?.id || email);
+        localStorage.setItem('token', data.token || data.user?.id || email);
+        if (data.user) {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        }
         navigate('/form');
       } else {
         alert(`Login failed: ${data.error}`);
@@ -44,6 +47,7 @@ const Login = () => {
   const handleLogout = () => {
     localStorage.removeItem('userLoggedIn');
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
     alert('Logged out successfully!');
     navigate('/login');
