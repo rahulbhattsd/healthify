@@ -1,11 +1,10 @@
 'use strict';
 
 const VALID_MODELS = [
-  'llama-3.3-70b-versatile',
+  'openai/gpt-oss-120b',
   'llama3-70b-8192',
-  'mixtral-8x7b-32768',
 ];
-const DEFAULT_MODEL = 'mixtral-8x7b-32768';
+const DEFAULT_MODEL = 'openai/gpt-oss-120b';
 
 function resolveGroqModel(envModel) {
   if (envModel && VALID_MODELS.includes(envModel.trim())) {
