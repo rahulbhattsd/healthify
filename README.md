@@ -33,80 +33,8 @@ The result is not presented as a medical diagnosis. The generation prompt explic
 
 ## Architecture
 
-```text
-┌─────────────────────────────── Client ───────────────────────────────┐
-│ React 18 + Vite                                                      │
-│                                                                      │
-│  Landing / Home / Auth                                               │
-│          │                                                           │
-│          ▼                                                           │
-│  Custom Health Intake Form                                           │
-│  • age • gender • height • weight                                    │
-│  • symptoms • duration                                               │
-│  • conditions • allergies • medications                              │
-│          │                                                           │
-│          ▼                                                           │
-│  Final Results Page                                                  │
-│  • consumes streaming response                                      │
-│  • parses Markdown sections                                          │
-│  • renders ReactMarkdown                                             │
-└───────────────────────────────┬──────────────────────────────────────┘
-                                │ HTTP / JSON / streaming text
-                                ▼
-┌────────────────────────────── Server ────────────────────────────────┐
-│ Express 4                                                            │
-│                                                                      │
-│  Security & transport                                                │
-│  • Helmet                                                            │
-│  • CORS                                                              │
-│  • JSON body limit                                                   │
-│  • global + advice-specific rate limiting                            │
-│                                                                      │
-│  Auth                                                                │
-│  • signup / login / logout                                           │
-│  • bcrypt password hashing                                           │
-│  • JWT issuance + protected middleware                               │
-│                                                                      │
-│  /api/health-advice                                                  │
-│          │                                                           │
-│          ├──────────────► Retrieval pipeline                         │
-│          │                 • build retrieval query                   │
-│          │                 • MiniLM embedding                         │
-│          │                 • Atlas $vectorSearch                      │
-│          │                 • cosine fallback                         │
-│          │                                                           │
-│          └──────────────► Prompt + Groq completion                    │
-│                            • structured Markdown                       │
-│                            • streaming or non-streaming               │
-└───────────────────────────────┬──────────────────────────────────────┘
-                                │
-                ┌───────────────┴──────────────────┐
-                ▼                                  ▼
-┌─────────────────────────────┐      ┌───────────────────────────────┐
-│ MongoDB Atlas                │      │ Groq API                      │
-│                              │      │                               │
-│ User                         │      │ Configurable allowed models  │
-│ KnowledgeChunk               │      │ Default: openai/gpt-oss-120b │
-│ • text                       │      │                               │
-│ • title                      │      └───────────────────────────────┘
-│ • sourceFile                 │
-│ • embedding [384 dims]       │
-└─────────────────────────────┘
+<img width="1536" height="1024" alt="ChatGPT Image Sep 15, 2026, 03_46_43 PM" src="https://github.com/user-attachments/assets/0d706ab4-cf73-45af-a39d-6255a84d8340" />
 
-Knowledge build path:
-knowledge/*.md
-      │
-      ▼
-chunk + 50-word overlap
-      │
-      ▼
-Xenova/all-MiniLM-L6-v2
-      │
-      ▼
-KnowledgeChunk collection
-```
-
----
 
 ## RAG Pipeline
 
