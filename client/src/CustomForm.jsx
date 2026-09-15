@@ -158,6 +158,9 @@ const CustomForm = () => {
     navigate('/result', {
       state: { formData },
     });
+
+    // Reset so the button is usable again if the user navigates back
+    setTimeout(() => setIsSubmitting(false), 500);
   };
 
   return (

@@ -9,7 +9,8 @@
     "build": "npm --prefix client install && npm --prefix client run build",
     "client:build": "npm --prefix client run build",
     "client:install": "npm --prefix client install",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:kb": "node scripts/buildKnowledgeBase.js",
+    "test": "node scripts/testRagE2E.js",
     "start": "node server.js",
     "dev": "node server.js"
   },
@@ -18,6 +19,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@xenova/transformers": "^2.17.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",

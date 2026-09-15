@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './About.css';
 
 const About = () => {
@@ -31,7 +32,7 @@ const About = () => {
       </p>
 
       <p className="cta-text animated fadeInUp">Join us on the journey to better health and personalized wellness today.</p>
-      <a href="/signup" className="about-cta-button animated bounceInUp">Get Started</a>
+      <Link to="/signup" className="about-cta-button animated bounceInUp">Get Started</Link>
     </div>
   );
 };

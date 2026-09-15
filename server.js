@@ -18,6 +18,12 @@ const {
   resolveGroqModel,
   validateHealthAdvicePayload,
 } = require('./healthAdviceService');
+const {
+  buildRetrievalQuery,
+  embedText,
+  retrieveRelevantChunks,
+  formatContextBlock,
+} = require('./ragService');
 const User = require('./User');
 
 const DEFAULT_PORT = 5000;
@@ -142,6 +148,7 @@ app.use(
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['X-Rag-Sources'],
   }),
 );
 
@@ -398,7 +405,25 @@ app.post('/api/health-advice', adviceLimiter, async (req, res) => {
     });
   }
 
-  const { systemPrompt, userPrompt } = buildHealthAdvicePrompt(value);
+  let retrievedContext = null;
+  let sources = [];
+
+  try {
+    const retrievalQuery = buildRetrievalQuery(value);
+    if (retrievalQuery) {
+      const queryEmbedding = await embedText(retrievalQuery);
+      const chunks = await retrieveRelevantChunks(queryEmbedding, 4);
+      const formatted = formatContextBlock(chunks);
+      retrievedContext = formatted.contextBlock;
+      sources = formatted.sources || [];
+    }
+  } catch (ragError) {
+    log('error', 'health-advice.rag-error', { message: ragError.message });
+    retrievedContext = null;
+    sources = [];
+  }
+
+  const { systemPrompt, userPrompt } = buildHealthAdvicePrompt(value, retrievedContext);
   const model = resolveGroqModel(process.env.GROQ_MODEL);
   const wantsStream = String(req.query.stream).toLowerCase() === 'true';
 
@@ -417,6 +442,7 @@ app.post('/api/health-advice', adviceLimiter, async (req, res) => {
     model,
     configuredModel: process.env.GROQ_MODEL || null,
     stream: wantsStream,
+    sourcesCount: sources.length,
   });
 
   try {
@@ -425,6 +451,12 @@ app.post('/api/health-advice', adviceLimiter, async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('X-Accel-Buffering', 'no');
       res.setHeader('Connection', 'keep-alive');
+      if (sources && sources.length > 0) {
+        res.setHeader(
+          'X-Rag-Sources',
+          Buffer.from(JSON.stringify(sources), 'utf-8').toString('base64'),
+        );
+      }
       res.status(200);
 
       const stream = await withTimeout(
@@ -472,6 +504,7 @@ app.post('/api/health-advice', adviceLimiter, async (req, res) => {
       model,
       response: responseText,
       usage,
+      sources,
     });
   } catch (error) {
     log('error', 'health-advice.groq-error', {
@@ -520,9 +553,14 @@ app.use((error, _req, res, _next) => {
 });
 
 const PORT = Number(process.env.PORT) || DEFAULT_PORT;
-app.listen(PORT, () => {
-  log('info', 'server.start', {
-    port: PORT,
-    env: process.env.NODE_ENV ?? 'development',
+
+if (require.main === module) {
+  app.listen(PORT, () => {
+    log('info', 'server.start', {
+      port: PORT,
+      env: process.env.NODE_ENV ?? 'development',
+    });
   });
-});
+}
+
+module.exports = app;

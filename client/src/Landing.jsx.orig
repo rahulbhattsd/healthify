@@ -1,36 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Landing.css';
 import { useNavigate } from 'react-router-dom';
 
-// Defined outside Landing to prevent remounts on every render
-const FeatureCard = ({ icon, title, description, delay = 0 }) => (
-  <div
-    className="feature-card"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="feature-icon">{icon}</div>
-    <h3>{title}</h3>
-    <p>{description}</p>
-    <div className="feature-glow"></div>
-  </div>
-);
-
-const StepCard = ({ number, text, delay = 0 }) => (
-  <div
-    className="step-card"
-    style={{ animationDelay: `${delay}ms` }}
-  >
-    <div className="step-number">{number}</div>
-    <p>{text}</p>
-  </div>
-);
-
 const Landing = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVisible, setIsVisible] = useState({});
   const navigate = useNavigate();
 
-  const handleStart = () => { navigate('/form'); };
-  const handleLeAbout = () => { navigate('/about'); };
-  const handleStartFree = () => { navigate('/form'); };
+  useEffect(() => {
+    // const handleMouseMove = (e) => {
+    //   setMousePosition({ x: e.clientX, y: e.clientY });
+    // };
+
+  //   window.addEventListener('mousemove', handleMouseMove);
+  //   return () => window.removeEventListener('mousemove', handleMouseMove);
+  // 
+  }, []
+  );
+
+  const handleStart = () => {
+    navigate('/form');
+  };
+const handleLeAbout = () => {
+  navigate('/about');
+};
+
+  const handleStartFree = () => {
+    navigate('/form');
+  };
+
+  const FeatureCard = ({ icon, title, description, delay = 0 }) => (
+    <div
+      className="feature-card"
+      style={{
+        animationDelay: `${delay}ms`,
+        transform: `translateY(${Math.sin(Date.now() / 1000 + delay) * 2}px)`
+      }}
+    >
+      <div className="feature-icon">{icon}</div>
+      <h3>{title}</h3>
+      <p>{description}</p>
+      <div className="feature-glow"></div>
+    </div>
+  );
+
+  const StepCard = ({ number, text, delay = 0 }) => (
+    <div
+      className="step-card"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <div className="step-number">{number}</div>
+      <p>{text}</p>
+    </div>
+  );
 
   return (
     <div className="landing">

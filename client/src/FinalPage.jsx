@@ -11,6 +11,7 @@ const SECTION_CONFIG = [
   { key: 'lifestyle', title: 'Lifestyle Tips' },
   { key: 'seeDoctor', title: 'See a Doctor' },
   { key: 'disclaimer', title: 'Safety Disclaimer' },
+  { key: 'sources', title: 'Sources' },
 ];
 
 const EMPTY_SECTIONS = {
@@ -20,6 +21,7 @@ const EMPTY_SECTIONS = {
   lifestyle: '',
   seeDoctor: '',
   disclaimer: '',
+  sources: '',
 };
 
 function readStoredPayload() {
@@ -60,6 +62,10 @@ function resolveSectionKey(heading) {
 
   if (lowerHeading.includes('disclaimer')) {
     return 'disclaimer';
+  }
+
+  if (lowerHeading.includes('source')) {
+    return 'sources';
   }
 
   return '';

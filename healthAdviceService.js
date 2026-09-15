@@ -2,7 +2,10 @@
 
 const VALID_MODELS = [
   'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'llama-3.3-70b-versatile',
   'llama3-70b-8192',
+  'mixtral-8x7b-32768',
 ];
 const DEFAULT_MODEL = 'openai/gpt-oss-120b';
 
@@ -142,7 +145,7 @@ function validateHealthAdvicePayload(body) {
   };
 }
 
-function buildHealthAdvicePrompt(data) {
+function buildHealthAdvicePrompt(data, retrievedContext) {
   const {
     age,
     gender,
@@ -155,16 +158,42 @@ function buildHealthAdvicePrompt(data) {
     currentMedications,
   } = data;
 
-  const systemPrompt =
-    "You are a knowledgeable and empathetic health advisor. Based on the patient's health form data, provide: 1) Possible insights about their condition, 2) Practical home remedies, 3) OTC medicine suggestions (always include a disclaimer to consult a doctor), 4) Lifestyle and dietary tips, 5) Red flag symptoms that require immediate medical attention. Be clear, structured, and compassionate. Do not diagnose - only advise." +
-    '\n\n' +
+  const contextText =
+    typeof retrievedContext === 'string'
+      ? retrievedContext.trim()
+      : typeof retrievedContext?.contextBlock === 'string'
+      ? retrievedContext.contextBlock.trim()
+      : '';
+
+  const systemPromptParts = [];
+
+  if (contextText) {
+    systemPromptParts.push(contextText);
+  }
+
+  systemPromptParts.push(
+    "You are a knowledgeable and empathetic health advisor. Based on the patient's health form data, provide: 1) Possible insights about their condition, 2) Practical home remedies, 3) OTC medicine suggestions (always include a disclaimer to consult a doctor), 4) Lifestyle and dietary tips, 5) Red flag symptoms that require immediate medical attention. Be clear, structured, and compassionate. Do not diagnose - only advise."
+  );
+
+  if (contextText) {
+    systemPromptParts.push(
+      "Ground your answer in the numbered reference material above wherever it's relevant. If the reference material doesn't cover something the patient needs, you may use general medical knowledge but say so explicitly. Cite reference numbers in brackets like [1] next to claims drawn from it."
+    );
+  }
+
+  systemPromptParts.push(
     'Respond in Markdown using exactly these headings in this order:' +
-    '\n## Possible Insights' +
-    '\n## Home Remedies' +
-    '\n## OTC Medicines' +
-    '\n## Lifestyle Tips' +
-    '\n## See a Doctor' +
-    '\n## Safety Disclaimer';
+      '\n## Possible Insights' +
+      '\n## Home Remedies' +
+      '\n## OTC Medicines' +
+      '\n## Lifestyle Tips' +
+      '\n## See a Doctor' +
+      '\n## Safety Disclaimer' +
+      '\n## Sources' +
+      '\n\nIn the "## Sources" section, list the numbered sources used from the reference material (e.g. [1] Title), or state "General knowledge — not from the reference set" if none applied.'
+  );
+
+  const systemPrompt = systemPromptParts.join('\n\n');
 
   const userPrompt = [
     'Here is the patient intake information:',
